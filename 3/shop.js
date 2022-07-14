@@ -33,10 +33,11 @@ class GoodsList {
   /** Возвращает массив доступных для продажи товаров в соответствии
    * с установленным фильтром и сортировкой по полю Price */
   get list() {
-    let goods = this.#goods.filter(good => this.filter.test(good.name));
+    let goods = this.#goods.filter(good => good.available)
+      .filter(good => this.filter.test(good.name));
     if (this.sortPrice) {
       goods.sort((a, b) =>
-        this.sortDir ? a.price - b.price : b.price - a.price
+        this.sortDir ? a.price - b.price : b.price - a.price,
       );
     }
     return goods;
@@ -72,7 +73,7 @@ class BasketGood extends Good {
       good.description,
       good.sizes,
       good.price,
-      good.available
+      good.available,
     );
     this.amount = amount; // количество товара в корзине
   }
@@ -180,15 +181,15 @@ console.log(goodsList.list);
 
 // Check GoodsList.remove()
 goodsList = new GoodsList(goods, /.+/, false, false);
-goodsList.remove(1);
-result = goodsList.list.length === 4 ? "done" : "error";
-console.log(`Check GoodsList.remove(id=1): ${result}`);
+goodsList.remove(2);
+result = goodsList.list.length === 2 ? "done" : "error";
+console.log(`Check GoodsList.remove(id=2): ${result}`);
 console.log(goodsList.list);
 
 // Check GoodsList.add()
-goodsList.add(goods[0]);
-result = goodsList.list.length === 5 ? "done" : "error";
-console.log(`Check GoodsList.add(goods[0]): ${result}`);
+goodsList.add(goods[1]);
+result = goodsList.list.length === 3 ? "done" : "error";
+console.log(`Check GoodsList.add(goods[1]): ${result}`);
 console.log(goodsList.list);
 
 // Check Basket
